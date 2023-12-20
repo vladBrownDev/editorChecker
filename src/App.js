@@ -47,6 +47,7 @@ function App() {
 
 	const [response, setResponse] = React.useState('')
 	const [isLoading, setLoading] = React.useState(false)
+
 	if(!localStorage.getItem("apikey")) {
 		const apikey = prompt('Write Gpt api key')
 		localStorage.setItem("apikey", apikey)
@@ -64,7 +65,7 @@ function App() {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization:
-					`Bearer ${localStorage.getItem("apikey")}`
+					"Bearer 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"
 			}
 		})
 			.then((res) => {
@@ -87,6 +88,11 @@ function App() {
 		setLangValue(selectedOption)
 	};
 
+	function setApiKey() {
+		const apikey = prompt('Write Gpt api key')
+		localStorage.setItem("apikey", apikey)
+	}
+
 	return (
 		<section>
 			<div className='sides' style={{display: response === '' ? 'flex' : 'none'}}>
@@ -100,6 +106,7 @@ function App() {
 				/>
 				<h2>Write task:</h2>
 				<textarea value={taskText} onChange={(e) => {setTaskText(e.target.value)} } name="" id="" cols="30" rows="10"></textarea>
+				<button className='submitCode' onClick={setApiKey} type="button">Change api key</button>
 				{/*<h2>Write starting code</h2>*/}
 				{/*<CodeMirror theme={vscodeDark} height="200px" width='calc(50vw - 1.5px)'*/}
 				{/*            extensions={langObject[langValue.value]} onChange={(val) => {*/}
