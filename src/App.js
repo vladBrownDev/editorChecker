@@ -33,10 +33,15 @@ function returnPrompt(lang, task, solution) {
     Please, analyze the task and student's solution of this task. Then, return the results in JSON format.
     In JSON there should be object with 3 variables.
     First one is your grade on scale from 1 to 100,
-    Second one is output of this code (if there is one function - return the output of the function), Third one is corrected code. Example of JSON: {"grade":"80","output":"hello world", "corrected":"
-    console.log('hello world')
-    console.log('hi')
-    "}. Remember - it's important that you give me only the JSON object. Grade, output and corrected variables should be a string type.`
+    Second one is output of this code (if there is one function - return the output of the function), Third one is corrected code.
+    REMEMBER - YOU WILL WRITE ME BACK ONLY A VALID JSON OBJECT, SO IT WILL NOT GIVE ME AN ERROR WHEN I'LL DO JSON.parse().
+    HERE'S THE EXAMPLE OF JSON OBJECT THAT YOU WILL GIVE ME: {"grade":"80","output":"hello world", "corrected":"
+	    console.log('hello world')
+	    console.log('hi')
+    "}. 
+    DO NOT INCLUDE ANY EXPLANATIONS.
+    Grade, output and corrected variables should be a string type.`
+
   return prompt
 }
 
@@ -74,6 +79,7 @@ function App() {
 		})
 			.then((res) => {
 				setResponse(JSON.parse(res.data.choices[0].message.content));
+				console.log(res.data.choices[0].message.content)
 				console.log(JSON.parse(res.data.choices[0].message.content))
 				setLoading(false)
 			})
