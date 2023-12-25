@@ -54,6 +54,10 @@ function App() {
 	}
 
 	const generateText = async () => {
+		if(!localStorage.getItem("apikey")) {
+			alert('You didnt provide the api key')
+			return
+		}
 		setLoading(true)
 		axios({
 			method: "POST",
@@ -65,7 +69,7 @@ function App() {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization:
-					"Bearer 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"
+					`Bearer ${localStorage.getItem("apikey")}`
 			}
 		})
 			.then((res) => {
