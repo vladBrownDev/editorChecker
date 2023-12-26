@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React from "react";
 import CodeMirror from '@uiw/react-codemirror';
@@ -6,6 +5,7 @@ import {javascript} from '@codemirror/lang-javascript';
 import {cpp} from "@codemirror/lang-cpp";
 import {java} from "@codemirror/lang-java";
 import {php} from "@codemirror/lang-php";
+import {python} from "@codemirror/lang-python"
 import {vscodeDark} from "@uiw/codemirror-theme-vscode";
 import Select from 'react-select';
 import axios from "axios";
@@ -16,18 +16,20 @@ const options = [
 	{label: 'C++', value: 'cpp'},
 	{label: 'Java', value: 'java'},
 	{label: 'PHP', value: 'php'},
+	{label: 'Python', value: 'python'},
 ];
 
 const langObject = {
 	js: [javascript({jsx: true})],
 	cpp: [cpp()],
 	java: [java()],
-	php: [php()]
+	php: [php()],
+	python: [python()]
 }
 
 function returnPrompt(lang, task, solution) {
 	const prompt = `
-	  As the ${lang} university teacher, you gave your student this task: ${task}
+	  As the ${lang} university teacher, you gave your student this task on ${lang} programming language: ${task}
     Your student came up with this solution of the task:
     ${solution}
     Please, analyze the task and student's solution of this task. Then, return the results in JSON format.
@@ -47,7 +49,7 @@ function returnPrompt(lang, task, solution) {
 
 function App() {
 	const [value, setValue] = React.useState("");
-	const [langValue, setLangValue] = React.useState('js')
+	const [langValue, setLangValue] = React.useState('')
 	const [taskText, setTaskText] = React.useState('')
 
 	const [response, setResponse] = React.useState('')
@@ -140,7 +142,12 @@ function App() {
 				<h1>Student's side</h1>
 				<CodeMirror value={value} theme={vscodeDark} height="500px" width='calc(50vw - 1.5px)'
 				            extensions={langObject[langValue.value]} onChange={onChange}/>
-				<button onClick={generateText} className='submitCode'>{isLoading ? "Loading..." : 'Submit'}</button>
+				<button 
+					onClick={generateText} 
+					className={langValue ? 'submitCode' : 'submitCode disabled'}
+					>
+					{isLoading ? "Loading..." : 'Submit'}
+				</button>
 			</div>
 		</section>
 	);
