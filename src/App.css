@@ -5,11 +5,14 @@ section {
     background: #1e1e1e
 }
 .sides {
-    min-width: calc(50vw - 1.5px);
+    min-width: calc(65vw - 1.5px);
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.sides:nth-child(1), .sides:nth-child(2) {
+    min-width: calc(35vw - 1.5px);
 }
 .sides:nth-child(3) {
     border-left: 3px solid #707070;
@@ -37,12 +40,21 @@ h2 {
     cursor: pointer;
 }
 textarea {
-    width: calc(46vw - 1.5px);
-    height: 200px;
+    width: calc(35vw - 1.5px);
+    height: 400px;
     background: #fff;
     border: 4px solid #474747;
 }
 .disabled {
     pointer-events: none;
     opacity: 0.4;
+}
+.editors {
+    width: 100%;
+    display: flex;
+ }
+.editorTitles {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }

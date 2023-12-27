@@ -41,7 +41,7 @@ function returnPrompt(lang, task, solution) {
 	    console.log('hello world')
 	    console.log('hi')
     "}. 
-    DO NOT INCLUDE ANY EXPLANATIONS.
+    DO NOT INCLUDE ANY EXPLANATIONS, JUST GIVE ME A JSON OBJECT.
     Grade, output and corrected variables should be a string type.`
 
   return prompt
@@ -80,9 +80,9 @@ function App() {
 			}
 		})
 			.then((res) => {
-				setResponse(JSON.parse(res.data.choices[0].message.content));
 				console.log(res.data.choices[0].message.content)
 				console.log(JSON.parse(res.data.choices[0].message.content))
+				setResponse(JSON.parse(res.data.choices[0].message.content));
 				setLoading(false)
 			})
 			.catch((e) => {
@@ -133,17 +133,22 @@ function App() {
 				<h2 style={{width: '80%', marginTop: '70px'}}>
 					Result: {response.output}
 				</h2>
-				<h2 style={{width: '80%', marginTop: '70px'}}>
-					Corrected Code: {response.corrected}
-				</h2>
 				<button className='submitCode' onClick={() => {setResponse('')}}>OK</button>
 			</div>
 			<div className='sides'>
 				<h1>Student's side</h1>
-				<CodeMirror value={value} theme={vscodeDark} height="500px" width='calc(50vw - 1.5px)'
-				            extensions={langObject[langValue.value]} onChange={onChange}/>
-				<button 
-					onClick={generateText} 
+				<span className='editorTitles'>
+					<h2>Student's code</h2>
+					<h2>Corrected code</h2>
+				</span>
+				<span className={'editors'}>
+					<CodeMirror value={value} theme={vscodeDark} height="500px" width='calc(32.5vw - 1.5px)'
+						            extensions={langObject[langValue.value]} onChange={onChange}/>
+					<CodeMirror value={response ? response.corrected : ''} readOnly={true} theme={vscodeDark} height="500px" width='calc(32.5vw - 1.5px)'
+					            extensions={langObject[langValue.value]}/>
+				</span>
+				<button
+					onClick={generateText}
 					className={langValue ? 'submitCode' : 'submitCode disabled'}
 					>
 					{isLoading ? "Loading..." : 'Submit'}
