@@ -27,26 +27,6 @@ const langObject = {
 	python: [python()]
 }
 
-function returnPrompt(lang, task, solution) {
-	const prompt = `
-	  As the ${lang} university teacher, you gave your student this task on ${lang} programming language: ${task}
-    Your student came up with this solution of the task:
-    ${solution}
-    Please, analyze the task and student's solution of this task. Then, return the results in JSON format.
-    In JSON there should be object with 3 variables.
-    First one is your grade on scale from 1 to 100,
-    Second one is output of this code (if there is one function - return the output of the function), Third one is corrected code.
-    REMEMBER - YOU WILL WRITE ME BACK ONLY A VALID JSON OBJECT, SO IT WILL NOT GIVE ME AN ERROR WHEN I'LL DO JSON.parse().
-    HERE'S THE EXAMPLE OF JSON OBJECT THAT YOU WILL GIVE ME: {"grade":"80","output":"hello world", "corrected":"
-	    console.log('hello world')
-	    console.log('hi')
-    "}. 
-    DO NOT INCLUDE ANY EXPLANATIONS, JUST GIVE ME A JSON OBJECT.
-    Grade, output and corrected variables should be a string type.`
-
-  return prompt
-}
-
 function App() {
 	const [value, setValue] = React.useState("");
 	const [langValue, setLangValue] = React.useState('')
@@ -54,10 +34,30 @@ function App() {
 
 	const [response, setResponse] = React.useState('')
 	const [isLoading, setLoading] = React.useState(false)
+	const [points, setPoints] = React.useState([5, 30])
 
 	if(!localStorage.getItem("apikey")) {
 		const apikey = prompt('Write Gpt api key')
 		localStorage.setItem("apikey", apikey)
+	}
+
+	function returnPrompt(lang, task, solution) {
+		const prompt = `
+	As a university teacher specializing in the ${lang} programming language, you assigned your students a task: ${task}.
+	One student submitted the following solution: ${solution}. 
+	Please analyze the task and the student's solution, then provide feedback in JSON format.
+	The JSON object should contain three variables: a grade from 1 to 100 (lower the grade for any syntax errors by ${points[0]} and lower the grade for wrong code output by ${points[1]}),
+	the output of the code (if the code includes a function, provide the function's output), and the corrected code if necessary.
+	Remember, the response should be a valid JSON object that won't produce an error during JSON.parse().
+	For instance, a valid response would look like this: {"grade":"80","output":"hello world", "corrected":"
+		console.log('hello world') 
+		console.log('hi')
+	"}.
+	Note: Ensure that the 'grade', 'output', and 'corrected' variables are all string types. 
+	Please do not include any additional explanations; only the JSON object is required.
+	`
+
+		return prompt
 	}
 
 	const generateText = async () => {
@@ -118,13 +118,18 @@ function App() {
 				/>
 				<h2>Write task:</h2>
 				<textarea value={taskText} onChange={(e) => {setTaskText(e.target.value)} } name="" id="" cols="30" rows="10"></textarea>
-				<button className='submitCode' onClick={setApiKey} type="button">Change api key</button>
-				{/*<h2>Write starting code</h2>*/}
-				{/*<CodeMirror theme={vscodeDark} height="200px" width='calc(50vw - 1.5px)'*/}
-				{/*            extensions={langObject[langValue.value]} onChange={(val) => {*/}
-				{/*	setValue(val)*/}
-				{/*}}/>*/}
-				{/*<button className='submitCode'>Save</button>*/}
+				<h2>Decrease points:</h2>
+				<div id='pointsDecreaser'>
+					<span>Decrease grade for syntax errors by</span>
+					<input type="number" value={points[0]} onChange={(e) => {setPoints([Number(e.target.value), points[1]])}}/>
+					<span>points</span>
+				</div>
+				<div id='pointsDecreaser'>
+					<span>Decrease grade for wrong output by</span>
+					<input type="number" value={points[1]} onChange={(e) => {setPoints([points[0], Number(e.target.value)])}}/>
+					<span>points</span>
+				</div>
+				<button className='submitCode changeApi' onClick={setApiKey} type="button">Change api key</button>
 			</div>
 			<div className="sides" style={{display: response === '' ? 'none' : 'block'}}>
 				<h2 style={{width: '80%', marginTop: '70px'}}>
