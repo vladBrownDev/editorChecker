@@ -71,3 +71,17 @@ textarea {
 .changeApi {
     margin-top: 100px;
 }
+.cm-mergeView {
+    max-width: 65vw;
+    background: white;
+    max-height: 60vh;
+}
+.hidden {
+    display: none;
+}
+.cm-changeGutter {
+    width: 9px !important;
+}
+.cm-mergeViewEditor {
+    width: 32.5vw !important;
+}
